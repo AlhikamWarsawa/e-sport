@@ -1,5 +1,5 @@
 # Tech Stack
-- **Laravel 12 (PHP 8.4.14)**
+- **Laravel 12 (PHP 8.4)**
 - **MySQL 8.0**
 - **phpMyAdmin**
 - **Docker Compose**
