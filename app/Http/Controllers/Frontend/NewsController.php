@@ -3,17 +3,15 @@
 namespace App\Http\Controllers\Frontend;
 
 use App\Http\Controllers\Controller;
-use App\Repositories\NewsRepository;
+use App\Models\News;
 
 class NewsController extends Controller
 {
-    public function __construct(private readonly NewsRepository $newsRepository)
-    {
-    }
-
     public function index()
     {
-        $news = $this->newsRepository->paginatePublished(9);
+        $news = News::published()
+            ->orderByDesc('published_at')
+            ->paginate(9);
 
         return view('frontend.news.index', [
             'news' => $news,
@@ -22,7 +20,7 @@ class NewsController extends Controller
 
     public function show(string $slug)
     {
-        $news = $this->newsRepository->findBySlug($slug);
+        $news = News::where('slug', $slug)->first();
 
         abort_if(is_null($news), 404);
 

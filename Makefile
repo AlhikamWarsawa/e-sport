@@ -15,7 +15,7 @@ install:
 g:
 	git pull
 	git add .
-	git commit -m "News for Frontend"
+	git commit -m "final news for member"
 	git push -u origin main
 
 # Docker Commands
