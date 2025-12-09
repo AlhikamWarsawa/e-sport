@@ -18,7 +18,6 @@
             <a href="/admin/dashboard" class="hover:text-blue-600">Dash Atmint</a>
             <a href="/" class="hover:text-blue-600">Home</a>
             <a href="/news" class="hover:text-blue-600">News</a>
-            <a href="/member/register" class="hover:text-blue-600">Register</a>
             <a href="/merchandise" class="hover:text-blue-600">Merchandise</a>
 
             <form action="/admin/logout" method="POST" class="inline">

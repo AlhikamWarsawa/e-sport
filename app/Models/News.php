@@ -38,6 +38,6 @@ class News extends Model
 
     public function getThumbnailUrlAttribute()
     {
-        return asset('images/' . $this->thumbnail);
+        return asset('images/news/' . $this->thumbnail);
     }
 }

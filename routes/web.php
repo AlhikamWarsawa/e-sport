@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Frontend\NewsController;
+use App\Http\Controllers\Frontend\MerchandiseController;
 use Illuminate\Support\Facades\Route;
 
 // Frontend
@@ -24,8 +25,11 @@ Route::prefix('member')->group(function () {
 
 // Merchandise
 Route::prefix('merchandise')->group(function () {
-    Route::get('/', fn () => view('frontend.merchandise.index'));
-    Route::get('{slug}', fn () => view('frontend.merchandise.show'));
+    Route::get('/', [MerchandiseController::class, 'index'])
+        ->name('merchandise.index');
+
+    Route::get('{slug}', [MerchandiseController::class, 'show'])
+        ->name('merchandise.show');
 });
 
 // Admin

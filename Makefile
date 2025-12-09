@@ -15,7 +15,7 @@ install:
 g:
 	git pull
 	git add .
-	git commit -m "fix image bug"
+	git commit -m "Merchandise"
 	git push -u origin main
 
 # Docker Commands
