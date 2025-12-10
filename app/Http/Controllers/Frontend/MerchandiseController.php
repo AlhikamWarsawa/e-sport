@@ -22,6 +22,9 @@ class MerchandiseController extends Controller
             ->where('slug', $slug)
             ->firstOrFail();
 
-        return view('frontend.merchandise.show', compact('item'));
+        $gallery = [$item->image_url];
+
+        return view('frontend.merchandise.show', compact('item', 'gallery'));
     }
+
 }

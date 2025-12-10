@@ -17,6 +17,8 @@ return new class extends Migration
             $table->string('phone', 20)->nullable();
             $table->date('birth_date')->nullable();
             $table->text('address')->nullable();
+            $table->string('city', 20)->nullable();
+            $table->text('photo')->nullable();
             $table->string('membership_id', 50);
             $table->string('payment_proof', 255);
             $table->enum('status', ['pending', 'approved', 'rejected'])->default('pending');

@@ -33,4 +33,12 @@ class Merchandise extends Model
     {
         return $this->hasMany(MerchandiseLink::class, 'merchandise_id');
     }
+
+    public function getImageUrlAttribute()
+    {
+        return $this->image
+            ? asset('images/merch/' . $this->image)
+            : asset('images/default.png');
+    }
+
 }
