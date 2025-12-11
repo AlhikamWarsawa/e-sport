@@ -15,7 +15,7 @@ install:
 g:
 	git pull
 	git add .
-	git commit -m "Merchandise detail"
+	git commit -m "Membership Form"
 	git push -u origin main
 
 # Docker Commands

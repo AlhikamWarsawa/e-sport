@@ -12,14 +12,14 @@
 
 <header class="bg-white shadow">
     <div class="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
-        <a href="/" class="text-xl font-bold">Fansclub E-Sport</a>
+        <a href="/" class="text-xl font-bold">Fansclub ESport</a>
 
         <nav class="space-x-6">
             <a href="/admin/dashboard" class="hover:text-blue-600">Atmint</a>
-            <a href="/" class="hover:text-blue-600">HOME</a>
-            <a href="/news" class="hover:text-blue-600">NEWS</a>
-            <a href="/merchandise" class="hover:text-blue-600">MERCHANDISE</a>
-            <a href="/member/register" class="hover:text-blue-600">MEMBERSHIP</a>
+            <a href="/" class="hover:text-blue-600">Home</a>
+            <a href="/news" class="hover:text-blue-600">News</a>
+            <a href="/merchandise" class="hover:text-blue-600">Merchandise</a>
+            <a href="/member/register" class="hover:text-blue-600">Membership</a>
 
             <form action="/admin/logout" method="POST" class="inline">
                 @csrf

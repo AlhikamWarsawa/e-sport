@@ -1,13 +1,20 @@
 <?php
 
+// Frontend
+use App\Http\Controllers\Frontend\HomeController;
 use App\Http\Controllers\Frontend\NewsController;
 use App\Http\Controllers\Frontend\MerchandiseController;
+use App\Http\Controllers\Frontend\MemberController;
+
+// Admin
+// ---
+
 use Illuminate\Support\Facades\Route;
 
 // Frontend
 
 // Home
-Route::get('/', fn () => view('frontend.home'));
+Route::get('/', [HomeController::class, 'index'])->name('home');
 
 // News
 Route::get('/news', [NewsController::class, 'index'])->name('news.index');
@@ -15,9 +22,8 @@ Route::get('/news/{slug}', [NewsController::class, 'show'])->name('news.show');
 
 // Member
 Route::prefix('member')->group(function () {
-    Route::get('/register', fn () => view('frontend.member.register'));
-    Route::post('register', fn () => view('frontend.member.register'));
-
+    Route::get('/register', [MemberController::class, 'create']);
+    Route::post('/register', [MemberController::class, 'store']);
     Route::get('profile', fn () => view('frontend.member.profile'));
     Route::get('qr', fn () => view('frontend.member.qr'));
     Route::post('update', fn () => view('frontend.member.profile'));
