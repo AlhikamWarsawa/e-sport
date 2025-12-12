@@ -15,7 +15,7 @@ install:
 g:
 	git pull
 	git add .
-	git commit -m "Membership Form"
+	git commit -m "Peninjauan Pendaftaran Email"
 	git push -u origin main
 
 # Docker Commands
@@ -38,6 +38,7 @@ mysql:
 # Laravel Commands
 
 migrate:
+	docker exec -it laravel_app php artisan migrate:fresh
 	docker exec -it laravel_app php artisan migrate
 
 serve:
@@ -46,3 +47,6 @@ serve:
 start:
 	docker compose up -d
 	docker exec -it laravel_app php artisan serve --host=0.0.0.0
+
+artisan:
+	docker exec -it laravel_app php artisan make:mail MemberPendingMail --markdown=emails.member_pending

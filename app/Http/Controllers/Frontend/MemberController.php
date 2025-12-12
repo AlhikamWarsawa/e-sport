@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Frontend;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\MemberProfile;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\MemberPendingMail;
 
 class MemberController extends Controller
 {
@@ -17,6 +19,7 @@ class MemberController extends Controller
     {
         $request->validate([
             'full_name'     => 'required|string|max:150',
+            'email'         => 'required|email|max:150|unique:member_profiles,email',
             'phone'         => 'required|string|max:20',
             'birth_date'    => 'nullable|date',
             'address'       => 'nullable|string',
@@ -34,8 +37,9 @@ class MemberController extends Controller
 
         $membershipId = $request->username;
 
-        MemberProfile::create([
+        $member = MemberProfile::create([
             'full_name'      => $request->full_name,
+            'email'          => $request->email,
             'phone'          => $request->phone,
             'birth_date'     => $request->birth_date,
             'address'        => $request->address,
@@ -48,7 +52,8 @@ class MemberController extends Controller
             'rejected_reason'=> null,
         ]);
 
-        return redirect()->back()->with('success', 'Pendaftaran berhasil dikirim. Menunggu verifikasi admin.');
-    }
+        Mail::to($member->email)->send(new MemberPendingMail($member));
 
+        return redirect()->back()->with('success', 'Pendaftaran berhasil dikirim. Menunggu verifikasi admin. Cek Email Secara Berkala');
+    }
 }

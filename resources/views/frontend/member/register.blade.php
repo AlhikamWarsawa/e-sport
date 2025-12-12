@@ -31,6 +31,12 @@
             </div>
 
             <div>
+                <label class="block font-semibold mb-1">Email <span class="text-red-500">*</span></label>
+                <input type="email" name="email" value="{{ old('email') }}"
+                       class="w-full border-gray-300 rounded p-2" required>
+            </div>
+
+            <div>
                 <label class="block font-semibold mb-1">Nomor HP <span class="text-red-500">*</span></label>
                 <input type="text" name="phone" value="{{ old('phone') }}"
                        class="w-full border-gray-300 rounded p-2" required>
@@ -43,15 +49,15 @@
             </div>
 
             <div>
-                <label class="block font-semibold mb-1">Alamat</label>
-                <textarea name="address" rows="3"
-                          class="w-full border-gray-300 rounded p-2">{{ old('address') }}</textarea>
-            </div>
-
-            <div>
                 <label class="block font-semibold mb-1">Kota</label>
                 <input type="text" name="city" value="{{ old('city') }}"
                        class="w-full border-gray-300 rounded p-2">
+            </div>
+
+            <div>
+                <label class="block font-semibold mb-1">Alamat</label>
+                <textarea name="address" rows="3"
+                          class="w-full border-gray-300 rounded p-2">{{ old('address') }}</textarea>
             </div>
 
             <div>

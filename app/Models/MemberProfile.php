@@ -13,6 +13,7 @@ class MemberProfile extends Model
 
     protected $fillable = [
         'full_name',
+        'email',
         'phone',
         'birth_date',
         'address',
@@ -29,6 +30,11 @@ class MemberProfile extends Model
         'birth_date' => 'date',
         'approved_at' => 'datetime',
     ];
+
+    public function user()
+    {
+        return $this->hasOne(User::class, 'member_id');
+    }
 
     public function getPhotoUrlAttribute()
     {

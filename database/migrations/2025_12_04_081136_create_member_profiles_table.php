@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('member_profiles', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('full_name', 150);
+            $table->string('email', 150)->unique();
             $table->string('phone', 20)->nullable();
             $table->date('birth_date')->nullable();
             $table->text('address')->nullable();

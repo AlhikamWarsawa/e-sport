@@ -12,7 +12,7 @@
 
     <header class="bg-white shadow" x-data="{ open: false }">
         <div class="max-w-7xl mx-auto px-8 md:px-6 lg:px-4 py-4 flex justify-between items-center border-b md:border-none ">
-            <a href="/" class="text-xl font-bold">Fansclub E-Sport</a>
+            <a href="/" class="text-xl font-bold">Fansclub Esport</a>
 
             <!-- Desktop Nav -->
             <nav class="space-x-6 hidden md:flex items-center">
