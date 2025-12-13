@@ -7,7 +7,9 @@ use App\Http\Controllers\Frontend\MerchandiseController;
 use App\Http\Controllers\Frontend\MemberController;
 
 // Admin
-// ---
+use App\Http\Controllers\Admin\Auth\LoginController;
+use App\Http\Controllers\Admin\DashboardController;
+
 
 use Illuminate\Support\Facades\Route;
 
@@ -42,12 +44,17 @@ Route::prefix('merchandise')->group(function () {
 Route::prefix('admin')->group(function () {
 
     // Auth
-    Route::get('login', fn () => view('admin.login'));
-    Route::post('login', fn () => view('admin.login'));
-    Route::post('logout', fn () => redirect('/'));
+    Route::get('login', [LoginController::class, 'index'])->name('admin.login');
+    Route::post('login', [LoginController::class, 'store']);
+    Route::post('logout', [LoginController::class, 'logout']);
+
+    Route::middleware('admin.auth')->group(function () {
+        Route::get('dashboard', [DashboardController::class, 'index'])
+            ->name('admin.dashboard');
+    });
 
     // Dashboard
-    Route::get('dashboard', fn () => view('admin.dashboard'));
+//    Route::get('dashboard', fn () => view('admin.dashboard'));
 
     // News
     Route::prefix('news')->group(function () {

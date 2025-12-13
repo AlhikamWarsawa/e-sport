@@ -15,7 +15,7 @@ install:
 g:
 	git pull
 	git add .
-	git commit -m "Peninjauan Pendaftaran Email"
+	git commit -m "Login Admin"
 	git push -u origin main
 
 # Docker Commands
@@ -48,5 +48,8 @@ start:
 	docker compose up -d
 	docker exec -it laravel_app php artisan serve --host=0.0.0.0
 
-artisan:
-	docker exec -it laravel_app php artisan make:mail MemberPendingMail --markdown=emails.member_pending
+refresh:
+	docker exec -it laravel_app php artisan optimize:clear
+
+tinker:
+	docker exec -it laravel_app php artisan tinker
