@@ -54,6 +54,6 @@ class MemberController extends Controller
 
         Mail::to($member->email)->send(new MemberPendingMail($member));
 
-        return redirect()->back()->with('success', 'Pendaftaran berhasil dikirim. Menunggu verifikasi admin. Cek Email Secara Berkala');
+        return redirect()->back()->with('success', 'Pendaftaran berhasil dikirim. Menunggu verifikasi admin. Cek email secara berkala');
     }
 }

@@ -10,13 +10,17 @@ class LoginController extends Controller
 {
     public function index()
     {
+        if (Auth::guard('admin')->check()) {
+            return redirect()->route('admin.dashboard');
+        }
+
         return view('admin.login');
     }
 
     public function store(Request $request)
     {
         $credentials = $request->validate([
-            'email'    => ['required', 'email'],
+            'email' => ['required', 'email'],
             'password' => ['required'],
         ]);
 
@@ -26,6 +30,9 @@ class LoginController extends Controller
 
             if (Auth::guard('admin')->user()->role !== 'admin') {
                 Auth::guard('admin')->logout();
+                $request->session()->invalidate();
+                $request->session()->regenerateToken();
+
                 return back()->withErrors([
                     'email' => 'Akun ini tidak memiliki akses admin.',
                 ]);
@@ -37,15 +44,5 @@ class LoginController extends Controller
         return back()->withErrors([
             'email' => 'Email atau password salah.',
         ]);
-    }
-
-    public function logout(Request $request)
-    {
-        Auth::guard('admin')->logout();
-
-        $request->session()->invalidate();
-        $request->session()->regenerateToken();
-
-        return redirect('/admin/login');
     }
 }

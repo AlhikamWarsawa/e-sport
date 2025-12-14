@@ -1,9 +1,53 @@
 @extends('layouts.admin')
 
-@section('title', 'Home')
+@section('title', 'Dashboard')
 
 @section('content')
-    <h1 class="text-2xl font-bold mb-4">ADMIN</h1>
+    <div class="container mx-auto px-4 py-6">
 
-    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Assumenda cum cumque dicta eius, facilis harum impedit iste libero magnam nam nihil perferendis, quo ratione sint, ut vel voluptatem voluptates voluptatum?</p>
+        <h1 class="text-2xl font-semibold mb-6">
+            Dashboard
+        </h1>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+
+            <div class="bg-white rounded-lg shadow p-5">
+                <div class="text-sm text-gray-500 mb-1">
+                    Total Members
+                </div>
+                <div class="text-3xl font-bold text-gray-900">
+                    {{ $totalMembers }}
+                </div>
+            </div>
+
+            <div class="bg-white rounded-lg shadow p-5">
+                <div class="text-sm text-gray-500 mb-1">
+                    Pending Applications
+                </div>
+                <div class="text-3xl font-bold text-yellow-600">
+                    {{ $pendingApplications }}
+                </div>
+            </div>
+
+            <div class="bg-white rounded-lg shadow p-5">
+                <div class="text-sm text-gray-500 mb-1">
+                    Published News
+                </div>
+                <div class="text-3xl font-bold text-blue-600">
+                    {{ $publishedNews }}
+                </div>
+            </div>
+
+            <div class="bg-white rounded-lg shadow p-5">
+                <div class="text-sm text-gray-500 mb-1">
+                    Total Merchandise
+                </div>
+                <div class="text-3xl font-bold text-green-600">
+                    {{ $totalMerchandise }}
+                </div>
+            </div>
+
+        </div>
+
+    </div>
 @endsection

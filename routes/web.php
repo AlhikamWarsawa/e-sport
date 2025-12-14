@@ -8,6 +8,7 @@ use App\Http\Controllers\Frontend\MemberController;
 
 // Admin
 use App\Http\Controllers\Admin\Auth\LoginController;
+use App\Http\Controllers\Admin\Auth\LogoutController;
 use App\Http\Controllers\Admin\DashboardController;
 
 
@@ -46,15 +47,13 @@ Route::prefix('admin')->group(function () {
     // Auth
     Route::get('login', [LoginController::class, 'index'])->name('admin.login');
     Route::post('login', [LoginController::class, 'store']);
-    Route::post('logout', [LoginController::class, 'logout']);
+    Route::post('logout', [LogoutController::class, 'logout']);
 
+    // Dashboard
     Route::middleware('admin.auth')->group(function () {
         Route::get('dashboard', [DashboardController::class, 'index'])
             ->name('admin.dashboard');
     });
-
-    // Dashboard
-//    Route::get('dashboard', fn () => view('admin.dashboard'));
 
     // News
     Route::prefix('news')->group(function () {

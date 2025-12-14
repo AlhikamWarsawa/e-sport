@@ -15,7 +15,7 @@ install:
 g:
 	git pull
 	git add .
-	git commit -m "Login Admin"
+	git commit -m "Dashboard Statistik Admin"
 	git push -u origin main
 
 # Docker Commands

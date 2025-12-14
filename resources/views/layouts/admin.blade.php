@@ -19,7 +19,7 @@
     <div class="max-w-7xl mx-auto px-8 md:px-6 lg:px-4 py-4 flex justify-between items-center border-b md:border-none">
 
         <div class="flex items-center gap-4">
-            <h1 class="text-lg font-semibold">Admin Panel</h1>
+            <a href="#" class="text-lg font-semibold">Admin Panel</a>
 
             @if($admin)
                 <span class="text-sm text-gray-300">
