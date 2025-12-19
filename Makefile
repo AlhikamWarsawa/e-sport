@@ -24,7 +24,7 @@ install:
 g:
 	git pull
 	git add .
-	git commit -m "Merchandise Edit & Delete (Merchandise 100%)"
+	git commit -m "Review Pendaftaran Member"
 	git push -u origin main
 
 # CMD Laravel Pake Ini

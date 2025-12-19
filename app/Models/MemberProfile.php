@@ -39,14 +39,14 @@ class MemberProfile extends Model
     public function getPhotoUrlAttribute()
     {
         return $this->photo
-            ? asset('storage/' . $this->photo)
-            : asset('images/default.png');
+            ? asset('images/' . $this->photo)
+            : null;
     }
 
     public function getPaymentProofUrlAttribute()
     {
         return $this->payment_proof
-            ? asset('storage/' . $this->payment_proof)
+            ? asset('images/proof/' . $this->payment_proof)
             : null;
     }
 }

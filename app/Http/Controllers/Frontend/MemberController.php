@@ -28,32 +28,28 @@ class MemberController extends Controller
             'payment_proof' => 'required|mimes:jpg,jpeg,png,pdf|max:2048',
         ]);
 
-        $directory = storage_path('app/public/proof');
-        if (!is_dir($directory)) {
-            mkdir($directory, 0775, true);
-        }
-
-        $proofPath = $request->file('payment_proof')->store('proof', 'public');
-
-        $membershipId = $request->username;
+        $file = $request->file('payment_proof');
+        $filename = time() . '_' . $file->getClientOriginalName();
+        $file->move(public_path('images/proof'), $filename);
 
         $member = MemberProfile::create([
-            'full_name'      => $request->full_name,
-            'email'          => $request->email,
-            'phone'          => $request->phone,
-            'birth_date'      => $request->birth_date ?: null,
-            'address'         => $request->address ?: null,
-            'city'            => $request->city ?: null,
-            'photo'          => null,
-            'membership_id'  => $membershipId,
-            'payment_proof'  => $proofPath,
-            'status'         => 'pending',
-            'approved_at'    => null,
-            'rejected_reason'=> null,
+            'full_name'       => $request->full_name,
+            'email'           => $request->email,
+            'phone'           => $request->phone,
+            'birth_date'      => $request->birth_date,
+            'address'         => $request->address,
+            'city'            => $request->city,
+            'photo'           => null,
+            'membership_id'   => $request->username,
+            'payment_proof'   => $filename,
+            'status'          => 'pending',
         ]);
 
         Mail::to($member->email)->send(new MemberPendingMail($member));
 
-        return redirect()->back()->with('success', 'Pendaftaran berhasil dikirim. Menunggu verifikasi admin. Cek email secara berkala');
+        return back()->with(
+            'success',
+            'Pendaftaran berhasil dikirim. Menunggu verifikasi admin.'
+        );
     }
 }

@@ -12,6 +12,7 @@ use App\Http\Controllers\Admin\Auth\LogoutController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\NewsAdminController;
 use App\Http\Controllers\Admin\MerchandiseAdminController;
+use App\Http\Controllers\Admin\ApplicationsController;
 
 
 use Illuminate\Support\Facades\Route;
@@ -68,10 +69,10 @@ Route::prefix('admin')->group(function () {
 
         // Application
         Route::prefix('applications')->group(function () {
-            Route::get('/', fn() => view('admin.applications.index'));
-            Route::get('{id}', fn() => view('admin.applications.show'));
-            Route::post('{id}/approve', fn() => view('admin.applications.show'));
-            Route::post('{id}/reject', fn() => view('admin.applications.show'));
+            Route::get('/', [ApplicationsController::class, 'index'])->name('admin.applications.index');
+            Route::get('{id}', [ApplicationsController::class, 'show'])->name('admin.applications.show');
+            Route::post('{id}/approve', [ApplicationsController::class, 'approve'])->name('admin.applications.approve');
+            Route::post('{id}/reject', [ApplicationsController::class, 'reject'])->name('admin.applications.reject');
         });
 
         // Merchandise
@@ -83,7 +84,6 @@ Route::prefix('admin')->group(function () {
             Route::put('{id}', [MerchandiseAdminController::class, 'update'])->name('admin.merchandise.update');
             Route::delete('{id}', [MerchandiseAdminController::class, 'destroy'])->name('admin.merchandise.destroy');
         });
-
     });
 });
 
