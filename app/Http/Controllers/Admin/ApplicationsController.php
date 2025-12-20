@@ -4,8 +4,11 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\MemberProfile;
+use App\Mail\MemberApprovedMail;
+use App\Mail\MemberRejectedMail;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Mail;
 
 class ApplicationsController extends Controller
 {
@@ -41,9 +44,12 @@ class ApplicationsController extends Controller
             'rejected_reason' => null,
         ]);
 
+        Mail::to($application->email)
+            ->send(new MemberApprovedMail($application));
+
         return redirect()
             ->route('admin.applications.index')
-            ->with('success', 'Pendaftaran berhasil diapprove.');
+            ->with('success', 'Pendaftaran berhasil diapprove dan email telah dikirim.');
     }
 
     public function reject(Request $request, $id)
@@ -66,8 +72,11 @@ class ApplicationsController extends Controller
             'approved_at'     => null,
         ]);
 
+        Mail::to($application->email)
+            ->send(new MemberRejectedMail($application));
+
         return redirect()
             ->route('admin.applications.index')
-            ->with('success', 'Pendaftaran berhasil direject.');
+            ->with('success', 'Pendaftaran berhasil direject dan email telah dikirim.');
     }
 }

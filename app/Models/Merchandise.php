@@ -38,7 +38,7 @@ class Merchandise extends Model
     {
         return $this->image
             ? asset('images/merch/' . $this->image)
-            : asset('images/default.png');
+            : '';
     }
 
 }
