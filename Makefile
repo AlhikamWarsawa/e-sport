@@ -24,7 +24,7 @@ install:
 g:
 	git pull
 	git add .
-	git commit -m "Member Login"
+	git commit -m "Fix Middleware"
 	git push -u origin main
 
 # CMD Laravel Pake Ini

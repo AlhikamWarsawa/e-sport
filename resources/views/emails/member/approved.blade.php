@@ -35,7 +35,7 @@
                     </div>
                     <div>
                         <strong>Password:</strong>
-                        {{ $member->user->plain_password ?? 'Password yang kamu terima saat pendaftaran' }}
+                        {{ $member->user->plain_password }}
                     </div>
                 </div>
 
