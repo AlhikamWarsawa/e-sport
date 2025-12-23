@@ -1,12 +1,16 @@
 <?php
 
-// Frontend
+use Illuminate\Support\Facades\Route;
+
+// FRONTEND
 use App\Http\Controllers\Frontend\HomeController;
 use App\Http\Controllers\Frontend\NewsController;
 use App\Http\Controllers\Frontend\MerchandiseController;
 use App\Http\Controllers\Frontend\MemberController;
+use App\Http\Controllers\Frontend\Auth\MemberLoginController;
+use App\Http\Controllers\Frontend\Auth\MemberLogoutController;
 
-// Admin
+// ADMIN
 use App\Http\Controllers\Admin\Auth\LoginController;
 use App\Http\Controllers\Admin\Auth\LogoutController;
 use App\Http\Controllers\Admin\DashboardController;
@@ -15,49 +19,57 @@ use App\Http\Controllers\Admin\MerchandiseAdminController;
 use App\Http\Controllers\Admin\ApplicationsController;
 
 
-use Illuminate\Support\Facades\Route;
-
-// Frontend
+// FRONTEND ROUTES
 
 // Home
 Route::get('/', [HomeController::class, 'index'])->name('home');
 
 // News
-Route::get('/news', [NewsController::class, 'index'])->name('news.index');
-Route::get('/news/{slug}', [NewsController::class, 'show'])->name('news.show');
-
-// Member
-Route::prefix('member')->group(function () {
-        Route::get('register', [MemberController::class, 'create']);
-        Route::post('register', [MemberController::class, 'store']);
-
-        Route::get('profile', [MemberController::class, 'profile'])->name('member.profile');
-        Route::get('qr', [MemberController::class, 'qr'])->name('member.qr');
-        Route::post('update', [MemberController::class, 'update'])->name('member.update');
+Route::prefix('news')->group(function () {
+    Route::get('/', [NewsController::class, 'index'])->name('news.index');
+    Route::get('{slug}', [NewsController::class, 'show'])->name('news.show');
 });
 
 // Merchandise
 Route::prefix('merchandise')->group(function () {
-    Route::get('/', [MerchandiseController::class, 'index'])
-        ->name('merchandise.index');
-
-    Route::get('{slug}', [MerchandiseController::class, 'show'])
-        ->name('merchandise.show');
+    Route::get('/', [MerchandiseController::class, 'index'])->name('merchandise.index');
+    Route::get('{slug}', [MerchandiseController::class, 'show'])->name('merchandise.show');
 });
 
-// Admin
+// MEMBER ROUTES
+Route::prefix('member')->group(function () {
+
+    // Public
+    Route::get('register', [MemberController::class, 'create'])->name('member.register');
+    Route::post('register', [MemberController::class, 'store'])->name('member.register.submit');
+    Route::get('login', [MemberLoginController::class, 'index'])->name('member.login');
+    Route::post('login', [MemberLoginController::class, 'store'])->name('member.login.submit');
+
+    // Private
+    Route::middleware('member')->group(function () {
+        Route::get('profile', [MemberController::class, 'profile'])->name('member.profile');
+        Route::get('qr', [MemberController::class, 'qr'])->name('member.qr');
+        Route::post('update', [MemberController::class, 'update'])->name('member.update');
+        Route::post('logout', [MemberLogoutController::class, 'logout'])->name('member.logout');
+    });
+});
+
+
+// ADMIN ROUTES
 Route::prefix('admin')->group(function () {
 
-    // Auth
+    // Admin Auth
     Route::get('login', [LoginController::class, 'index'])->name('admin.login');
-    Route::post('login', [LoginController::class, 'store']);
-    Route::post('logout', [LogoutController::class, 'logout']);
+    Route::post('login', [LoginController::class, 'store'])->name('admin.login.submit');
+    Route::post('logout', [LogoutController::class, 'logout'])->name('admin.logout');
 
-    // Dashboard
+    // Admin Middleware
     Route::middleware('admin.auth')->group(function () {
-        Route::get('dashboard', [DashboardController::class, 'index'])
-            ->name('admin.dashboard');
 
+        // Dashboard
+        Route::get('dashboard', [DashboardController::class, 'index'])->name('admin.dashboard');
+
+        // Admin News
         Route::prefix('news')->group(function () {
             Route::get('/', [NewsAdminController::class, 'index'])->name('admin.news.index');
             Route::get('create', [NewsAdminController::class, 'create'])->name('admin.news.create');
@@ -68,7 +80,7 @@ Route::prefix('admin')->group(function () {
             Route::post('{id}/toggle', [NewsAdminController::class, 'toggle'])->name('admin.news.toggle');
         });
 
-        // Application
+        // Admin Applications
         Route::prefix('applications')->group(function () {
             Route::get('/', [ApplicationsController::class, 'index'])->name('admin.applications.index');
             Route::get('{id}', [ApplicationsController::class, 'show'])->name('admin.applications.show');
@@ -76,7 +88,7 @@ Route::prefix('admin')->group(function () {
             Route::post('{id}/reject', [ApplicationsController::class, 'reject'])->name('admin.applications.reject');
         });
 
-        // Merchandise
+        // Admin Merchandise
         Route::prefix('merchandise')->group(function () {
             Route::get('/', [MerchandiseAdminController::class, 'index'])->name('admin.merchandise.index');
             Route::get('create', [MerchandiseAdminController::class, 'create'])->name('admin.merchandise.create');
@@ -87,4 +99,3 @@ Route::prefix('admin')->group(function () {
         });
     });
 });
-

@@ -24,12 +24,27 @@
                 <x-nav-link href="/" :active="request()->is('/')">Home</x-nav-link>
                 <x-nav-link href="/news" :active="request()->is('news')">News</x-nav-link>
                 <x-nav-link href="/merchandise" :active="request()->is('merchandise')">Merchandise</x-nav-link>
-                <x-nav-link href="/member/register" :active="request()->is('member')">Membership</x-nav-link>
-
-                <form action="/admin/logout" method="POST" class="inline">
-                    @csrf
-                    <button class="hover:text-red-400">Logout</button>
-                </form>
+                @auth('member')
+                    <x-nav-link href="{{ route('member.profile') }}" :active="request()->is('member/profile')">
+                        Profile
+                    </x-nav-link>
+                @else
+                    <x-nav-link href="{{ route('member.register') }}" :active="request()->is('member/register')">
+                        Membership
+                    </x-nav-link>
+                @endauth
+                @auth('member')
+                    <form action="{{ route('member.logout') }}" method="POST" class="inline">
+                        @csrf
+                        <button class="hover:text-red-400">
+                            Logout
+                        </button>
+                    </form>
+                @else
+                    <a href="{{ route('member.login') }}" class="hover:text-blue-600">
+                        Login
+                    </a>
+                @endauth
             </nav>
 
             {{-- Mobile Toggle --}}
@@ -65,12 +80,28 @@
             <x-nav-link href="/" :active="request()->is('/')" mobile>Home</x-nav-link>
             <x-nav-link href="/news" :active="request()->is('news')" mobile>News</x-nav-link>
             <x-nav-link href="/merchandise" :active="request()->is('merchandise')" mobile>Merchandise</x-nav-link>
-            <x-nav-link href="/member/register" :active="request()->is('member')" mobile>Membership</x-nav-link>
-
-            <form action="/admin/logout" method="POST" class="px-8 py-1.5">
-                @csrf
-                <button class="hover:text-blue-400">Logout</button>
-            </form>
+            @auth('member')
+                <x-nav-link href="{{ route('member.profile') }}" :active="request()->is('member/profile')">
+                    Profile
+                </x-nav-link>
+            @else
+                <x-nav-link href="{{ route('member.register') }}" :active="request()->is('member/register')">
+                    Membership
+                </x-nav-link>
+            @endauth
+            @auth('member')
+                <form action="{{ route('member.logout') }}" method="POST" class="px-8 py-1.5">
+                    @csrf
+                    <button class="hover:text-red-400">
+                        Logout
+                    </button>
+                </form>
+            @else
+                <a href="{{ route('member.login') }}"
+                   class="block px-8 py-2 hover:text-blue-400">
+                    Login
+                </a>
+            @endauth
         </nav>
     </header>
 

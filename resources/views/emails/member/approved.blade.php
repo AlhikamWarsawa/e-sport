@@ -7,13 +7,12 @@
             </h2>
 
             <p style="margin:0 0 14px;font-size:14px;color:#374151;">
-                Kami dengan senang hati menginformasikan bahwa pendaftaran kamu sebagai
-                <strong>member Fansclub Esports telah disetujui</strong>.
+                Pendaftaran kamu sebagai <strong>member Fansclub Esports telah disetujui</strong>.
             </p>
 
             <p style="margin:0 0 14px;font-size:14px;color:#374151;">
-                Kamu sekarang resmi terdaftar sebagai member dan dapat mengakses halaman profil
-                untuk melihat detail keanggotaan kamu.
+                Akun member kamu sudah aktif dan sekarang kamu bisa login untuk mengakses halaman profil
+                serta informasi keanggotaan.
             </p>
 
             <div style="margin:18px 0;padding:14px 16px;background:#f1f5f9;border:1px dashed #cbd5e1;border-radius:10px;">
@@ -25,16 +24,37 @@
                 </div>
             </div>
 
-            <div style="margin:20px 0;text-align:center;">
-                <a href="{{ url('/member/profile') }}"
+            <div style="margin:18px 0;padding:14px 16px;background:#fefce8;border:1px dashed #fde68a;border-radius:10px;">
+                <div style="font-size:12px;color:#92400e;letter-spacing:.02em;margin-bottom:6px;">
+                    Informasi Login
+                </div>
+
+                <div style="font-size:14px;color:#78350f;line-height:1.6;">
+                    <div>
+                        <strong>Email:</strong> {{ $member->email }}
+                    </div>
+                    <div>
+                        <strong>Password:</strong>
+                        {{ $member->user->plain_password ?? 'Password yang kamu terima saat pendaftaran' }}
+                    </div>
+                </div>
+
+                <div style="margin-top:10px;font-size:12px;color:#92400e;">
+                    Demi keamanan, segera login dan ubah password kamu setelah berhasil masuk.
+                </div>
+            </div>
+
+            <div style="margin:22px 0;text-align:center;">
+                <a href="{{ url('/member/login') }}"
                    style="display:inline-block;padding:12px 22px;background:#2563eb;color:#ffffff;
                           text-decoration:none;font-size:14px;font-weight:600;border-radius:8px;">
-                    Lihat Profil Member
+                    Login & Lihat Profil Member
                 </a>
             </div>
 
             <p style="margin:0 0 14px;font-size:14px;color:#374151;">
-                Jika kamu memiliki pertanyaan lebih lanjut, silakan menghubungi admin Fansclub.
+                Jika kamu mengalami kendala saat login atau memiliki pertanyaan,
+                silakan menghubungi admin Fansclub.
             </p>
 
             <p style="margin:0;font-size:14px;color:#374151;">
@@ -48,7 +68,7 @@
         </div>
 
         <div style="padding:14px 20px;border-top:1px solid #f1f5f9;background:#fafafa;color:#9ca3af;font-size:12px;text-align:center;">
-            Email ini dikirim otomatis. Mohon tidak membalas email ini.
+            Email ini dikirim secara otomatis. Mohon tidak membalas email ini.
         </div>
     </div>
 </div>

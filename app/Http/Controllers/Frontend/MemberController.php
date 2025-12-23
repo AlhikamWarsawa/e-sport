@@ -57,11 +57,7 @@ class MemberController extends Controller
 
     public function profile()
     {
-        $user = Auth::user();
-
-        if (!$user || !$user->member_id) {
-            abort(404, 'Member profile not found');
-        }
+        $user = Auth::guard('member')->user();
 
         $profile = MemberProfile::findOrFail($user->member_id);
 
@@ -70,7 +66,8 @@ class MemberController extends Controller
 
     public function qr()
     {
-        $profile = MemberProfile::where('email', Auth::user()->email)->firstOrFail();
+        $user = Auth::guard('member')->user();
+        $profile = MemberProfile::findOrFail($user->member_id);
 
         if ($profile->status !== 'approved') {
             abort(403, 'QR Code hanya tersedia untuk member yang sudah disetujui.');
@@ -81,7 +78,8 @@ class MemberController extends Controller
 
     public function update(Request $request)
     {
-        $profile = MemberProfile::where('email', Auth::user()->email)->firstOrFail();
+        $user = Auth::guard('member')->user();
+        $profile = MemberProfile::findOrFail($user->member_id);
 
         $data = $request->validate([
             'full_name' => 'required|string|max:150',
