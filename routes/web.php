@@ -9,6 +9,7 @@ use App\Http\Controllers\Frontend\MerchandiseController;
 use App\Http\Controllers\Frontend\MemberController;
 use App\Http\Controllers\Frontend\Auth\MemberLoginController;
 use App\Http\Controllers\Frontend\Auth\MemberLogoutController;
+use App\Http\Controllers\Frontend\Auth\MemberPasswordController;
 
 // ADMIN
 use App\Http\Controllers\Admin\Auth\LoginController;
@@ -38,14 +39,23 @@ Route::prefix('merchandise')->group(function () {
 
 // MEMBER ROUTES
 Route::prefix('member')->group(function () {
-
-    // Public
     Route::get('register', [MemberController::class, 'create'])->name('member.register');
     Route::post('register', [MemberController::class, 'store'])->name('member.register.submit');
+
     Route::get('login', [MemberLoginController::class, 'index'])->name('member.login');
     Route::post('login', [MemberLoginController::class, 'store'])->name('member.login.submit');
 
-    // Private
+    Route::get('set-password/{token}', [MemberPasswordController::class, 'index'])->name('member.password.index');
+    Route::post('set-password/{token}', [MemberPasswordController::class, 'store'])->name('member.password.store');
+
+    Route::get('forgot-password', function () {
+        return view('frontend.member.forgot-password');
+    })->name('member.password.forgot');
+
+    Route::post('forgot-password', function () {
+        abort(501);
+    })->name('member.password.forgot.submit');
+
     Route::middleware('member')->group(function () {
         Route::get('profile', [MemberController::class, 'profile'])->name('member.profile');
         Route::get('qr', [MemberController::class, 'qr'])->name('member.qr');
@@ -53,6 +63,7 @@ Route::prefix('member')->group(function () {
         Route::post('logout', [MemberLogoutController::class, 'logout'])->name('member.logout');
     });
 });
+
 
 
 // ADMIN ROUTES

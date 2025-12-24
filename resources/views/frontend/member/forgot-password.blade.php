@@ -1,17 +1,17 @@
 @extends('layouts.app')
 
-@section('title', 'Login Member')
+@section('title', 'Lupa Password')
 
 @section('content')
     <div class="min-h-screen flex items-center justify-center bg-gray-100">
         <div class="w-full max-w-md bg-white rounded-lg shadow p-6">
 
             <h1 class="text-2xl font-semibold text-center mb-1 text-gray-800">
-                Login Member
+                Lupa Password
             </h1>
 
             <p class="text-sm text-gray-500 text-center mb-6">
-                Masuk untuk mengakses profil member
+                Masukkan email yang terdaftar untuk menerima link reset password.
             </p>
 
             @if ($errors->any())
@@ -26,10 +26,10 @@
                 </div>
             @endif
 
-            <form method="POST" action="{{ route('member.login.submit') }}">
+            <form method="POST" action="{{ route('member.password.forgot.submit') }}">
                 @csrf
 
-                <div class="mb-4">
+                <div class="mb-6">
                     <label for="email" class="block text-sm font-medium mb-1 text-gray-700">
                         Email
                     </label>
@@ -45,41 +45,18 @@
                     >
                 </div>
 
-                <div class="mb-2">
-                    <label for="password" class="block text-sm font-medium mb-1 text-gray-700">
-                        Password
-                    </label>
-                    <input
-                        type="password"
-                        id="password"
-                        name="password"
-                        required
-                        class="w-full border rounded px-3 py-2 focus:outline-none focus:ring focus:ring-blue-500"
-                        placeholder="Password"
-                    >
-                </div>
-
-                <div class="mb-6 text-right">
-                    <a
-                        href="{{ route('member.password.forgot') }}"
-                        class="text-xs text-blue-600 hover:underline"
-                    >
-                        Lupa password?
-                    </a>
-                </div>
-
                 <button
                     type="submit"
                     class="w-full bg-blue-600 text-white py-2 rounded font-semibold hover:bg-blue-700 transition"
                 >
-                    Login
+                    Kirim Link Reset Password
                 </button>
             </form>
 
             <div class="mt-6 text-center text-sm text-gray-500">
-                Belum punya akun?
-                <a href="{{ route('member.register') }}" class="text-blue-600 hover:underline">
-                    Daftar Member
+                Kembali ke
+                <a href="{{ route('member.login') }}" class="text-blue-600 hover:underline">
+                    Login Member
                 </a>
             </div>
 

@@ -24,7 +24,7 @@ install:
 g:
 	git pull
 	git add .
-	git commit -m "Fix Middleware"
+	git commit -m "Member Profile Page + Magic Link"
 	git push -u origin main
 
 # CMD Laravel Pake Ini

@@ -17,6 +17,8 @@ class User extends Authenticatable
         'password',
         'role',
         'status',
+        'set_password_token',
+        'set_password_token_expired_at',
     ];
 
     protected $hidden = [

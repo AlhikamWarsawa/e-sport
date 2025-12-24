@@ -25,7 +25,7 @@ class MemberController extends Controller
             'phone'         => 'required|string|max:20',
             'birth_date'    => 'nullable|date',
             'address'       => 'nullable|string',
-            'city'          => 'nullable|string|max:20',
+            'city'          => 'nullable|string|max:50',
             'username'      => 'required|string|max:50|unique:member_profiles,membership_id',
             'payment_proof' => 'required|mimes:jpg,jpeg,png,pdf|max:2048',
         ]);
@@ -42,7 +42,7 @@ class MemberController extends Controller
             'address'       => $request->address,
             'city'          => $request->city,
             'photo'         => null,
-            'membership_id' => $request->username,
+            'membership_id' => $request->username, // username awal
             'payment_proof' => $filename,
             'status'        => 'pending',
         ]);
@@ -59,7 +59,15 @@ class MemberController extends Controller
     {
         $user = Auth::guard('member')->user();
 
-        $profile = MemberProfile::findOrFail($user->member_id);
+        if (!$user || !$user->memberProfile) {
+            abort(403);
+        }
+
+        $profile = $user->memberProfile;
+
+        if (!$profile->isApproved()) {
+            abort(403, 'Profil hanya dapat diakses setelah pendaftaran disetujui.');
+        }
 
         return view('frontend.member.profile', compact('profile'));
     }
@@ -67,9 +75,14 @@ class MemberController extends Controller
     public function qr()
     {
         $user = Auth::guard('member')->user();
-        $profile = MemberProfile::findOrFail($user->member_id);
 
-        if ($profile->status !== 'approved') {
+        if (!$user || !$user->memberProfile) {
+            abort(403);
+        }
+
+        $profile = $user->memberProfile;
+
+        if (!$profile->isApproved()) {
             abort(403, 'QR Code hanya tersedia untuk member yang sudah disetujui.');
         }
 
@@ -79,13 +92,18 @@ class MemberController extends Controller
     public function update(Request $request)
     {
         $user = Auth::guard('member')->user();
-        $profile = MemberProfile::findOrFail($user->member_id);
+
+        if (!$user || !$user->memberProfile) {
+            abort(403);
+        }
+
+        $profile = $user->memberProfile;
 
         $data = $request->validate([
             'full_name' => 'required|string|max:150',
             'phone'     => 'nullable|string|max:20',
             'address'   => 'nullable|string',
-            'city'      => 'nullable|string|max:20',
+            'city'      => 'nullable|string|max:50',
             'photo'     => 'nullable|image|max:2048',
         ]);
 

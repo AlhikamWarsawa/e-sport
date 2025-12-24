@@ -34,7 +34,7 @@ class MemberProfile extends Model
 
     public function user()
     {
-        return $this->hasOne(User::class, 'member_id');
+        return $this->hasOne(User::class, 'member_id', 'id');
     }
 
     public function getPhotoUrlAttribute()
