@@ -8,28 +8,35 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
 
 class MemberPasswordController extends Controller
 {
-    public function index(string $token)
+    protected function getUserByValidToken(string $token): User
     {
-        $user = User::query()
-            ->where('set_password_token', $token)
-            ->first();
+        $user = User::where('set_password_token', $token)->first();
 
         if (!$user) {
             abort(404);
         }
 
-        if ($user->set_password_token_expired_at && Carbon::parse($user->set_password_token_expired_at)->isPast()) {
-            return redirect()
-                ->route('member.login')
-                ->withErrors(['token' => 'Link set password sudah kadaluarsa. Silakan minta link baru.']);
+        if (
+            $user->set_password_token_expired_at &&
+            Carbon::parse($user->set_password_token_expired_at)->isPast()
+        ) {
+            abort(403, 'Token set password sudah kadaluarsa.');
         }
 
-        if (empty($user->member_id) || ($user->role ?? null) === 'admin') {
+        if (empty($user->member_id) || $user->role === 'admin') {
             abort(403);
         }
+
+        return $user;
+    }
+
+    public function index(string $token)
+    {
+        $user = $this->getUserByValidToken($token);
 
         return view('frontend.member.set-password', [
             'token' => $token,
@@ -43,34 +50,46 @@ class MemberPasswordController extends Controller
             'password' => ['required', 'min:8', 'confirmed'],
         ]);
 
-        $user = User::query()
-            ->where('set_password_token', $token)
-            ->first();
+        $user = $this->getUserByValidToken($token);
 
-        if (!$user) {
-            return redirect()
-                ->route('member.login')
-                ->withErrors(['token' => 'Link set password tidak valid.']);
-        }
-
-        if ($user->set_password_token_expired_at && Carbon::parse($user->set_password_token_expired_at)->isPast()) {
-            return redirect()
-                ->route('member.login')
-                ->withErrors(['token' => 'Link set password sudah kadaluarsa. Silakan minta link baru.']);
-        }
-
-        if (empty($user->member_id) || ($user->role ?? null) === 'admin') {
-            abort(403);
-        }
-
-        $user->password = Hash::make($data['password']);
-        $user->set_password_token = null;
-        $user->set_password_token_expired_at = null;
-        $user->save();
+        $user->update([
+            'password' => Hash::make($data['password']),
+            'set_password_token' => null,
+            'set_password_token_expired_at' => null,
+        ]);
 
         Auth::guard('member')->login($user);
         $request->session()->regenerate();
 
         return redirect()->route('member.profile');
+    }
+
+    public function sendForgotPasswordLink(Request $request)
+    {
+        $request->validate([
+            'email' => ['required', 'email'],
+        ]);
+
+        $user = User::where('email', $request->email)
+            ->whereNotNull('member_id')
+            ->where('role', '!=', 'admin')
+            ->first();
+
+        if (!$user) {
+            return back()->withErrors([
+                'email' => 'Email tidak ditemukan atau bukan akun member.',
+            ]);
+        }
+
+        $user->update([
+            'set_password_token' => Str::uuid(),
+            'set_password_token_expired_at' => now()->addMinutes(30),
+        ]);
+
+        \Mail::to($user->email)->send(
+            new \App\Mail\MemberForgotPassword($user)
+        );
+
+        return back()->with('success', 'Link reset password telah dikirim ke email.');
     }
 }

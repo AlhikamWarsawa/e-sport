@@ -1,6 +1,5 @@
 <div style="background:#f5f7fb;padding:24px 12px;margin:0;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;color:#1f2937;">
     <div style="max-width:600px;margin:0 auto;background:#ffffff;border:1px solid #e5e7eb;border-radius:12px;overflow:hidden;box-shadow:0 4px 14px rgba(0,0,0,0.06);">
-
         <div style="padding:28px 24px;">
             <h2 style="margin:0 0 8px;font-size:22px;line-height:1.3;color:#0f172a;">
                 Halo {{ $member->full_name }},

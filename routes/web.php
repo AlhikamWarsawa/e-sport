@@ -52,13 +52,15 @@ Route::prefix('member')->group(function () {
         return view('frontend.member.forgot-password');
     })->name('member.password.forgot');
 
-    Route::post('forgot-password', function () {
-        abort(501);
-    })->name('member.password.forgot.submit');
+    Route::post('forgot-password', [
+        MemberPasswordController::class,
+        'sendForgotPasswordLink'
+    ])->name('member.password.forgot.submit');
 
     Route::middleware('member')->group(function () {
         Route::get('profile', [MemberController::class, 'profile'])->name('member.profile');
         Route::get('qr', [MemberController::class, 'qr'])->name('member.qr');
+        Route::post('update-photo', [MemberController::class, 'updatePhoto'])->name('member.update.photo');
         Route::post('update', [MemberController::class, 'update'])->name('member.update');
         Route::post('logout', [MemberLogoutController::class, 'logout'])->name('member.logout');
     });

@@ -37,21 +37,21 @@ class MemberProfile extends Model
         return $this->hasOne(User::class, 'member_id', 'id');
     }
 
-    public function getPhotoUrlAttribute()
+    public function getPhotoUrlAttribute(): ?string
     {
         return $this->photo
-            ? asset('images/' . $this->photo)
+            ? asset('images/profile/' . $this->photo)
             : null;
     }
 
-    public function getPaymentProofUrlAttribute()
+    public function getPaymentProofUrlAttribute(): ?string
     {
         return $this->payment_proof
             ? asset('images/proof/' . $this->payment_proof)
             : null;
     }
 
-    public function getQrCodeUrlAttribute()
+    public function getQrCodeUrlAttribute(): ?string
     {
         return $this->qr_code_path
             ? asset('images/qr/' . $this->qr_code_path)

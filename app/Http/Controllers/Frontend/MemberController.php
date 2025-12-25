@@ -31,8 +31,8 @@ class MemberController extends Controller
         ]);
 
         $file = $request->file('payment_proof');
-        $filename = time() . '_' . $file->getClientOriginalName();
-        $file->move(public_path('images/proof'), $filename);
+        $proofName = time() . '_' . $file->getClientOriginalName();
+        $file->move(public_path('images/proof'), $proofName);
 
         $profile = MemberProfile::create([
             'full_name'     => $request->full_name,
@@ -42,8 +42,8 @@ class MemberController extends Controller
             'address'       => $request->address,
             'city'          => $request->city,
             'photo'         => null,
-            'membership_id' => $request->username, // username awal
-            'payment_proof' => $filename,
+            'membership_id' => $request->username,
+            'payment_proof' => $proofName,
             'status'        => 'pending',
         ]);
 
@@ -108,14 +108,18 @@ class MemberController extends Controller
         ]);
 
         if ($request->hasFile('photo')) {
-            if ($profile->photo && File::exists(public_path($profile->photo))) {
-                File::delete(public_path($profile->photo));
+
+            if (
+                $profile->photo &&
+                File::exists(public_path('images/profile/' . $profile->photo))
+            ) {
+                File::delete(public_path('images/profile/' . $profile->photo));
             }
 
-            $filename = time() . '_' . $request->photo->getClientOriginalName();
-            $request->photo->move(public_path('images/member'), $filename);
+            $photoName = time() . '_' . $request->photo->getClientOriginalName();
+            $request->photo->move(public_path('images/profile'), $photoName);
 
-            $data['photo'] = 'images/member/' . $filename;
+            $data['photo'] = $photoName;
         }
 
         $profile->update($data);
@@ -123,5 +127,38 @@ class MemberController extends Controller
         return redirect()
             ->route('member.profile')
             ->with('success', 'Profil berhasil diperbarui.');
+    }
+
+    public function updatePhoto(Request $request)
+    {
+        $user = Auth::guard('member')->user();
+
+        if (!$user || !$user->memberProfile) {
+            abort(403);
+        }
+
+        $profile = $user->memberProfile;
+
+        $data = $request->validate([
+            'photo' => ['required', 'image', 'max:2048'],
+        ]);
+
+        if ($request->hasFile('photo')) {
+            // hapus foto lama
+            if ($profile->photo && File::exists(public_path('images/profile/' . $profile->photo))) {
+                File::delete(public_path('images/profile/' . $profile->photo));
+            }
+
+            $photoName = time() . '_' . $request->photo->getClientOriginalName();
+            $request->photo->move(public_path('images/profile'), $photoName);
+
+            $profile->update([
+                'photo' => $photoName,
+            ]);
+        }
+
+        return redirect()
+            ->route('member.profile')
+            ->with('success', 'Foto profil berhasil diperbarui.');
     }
 }

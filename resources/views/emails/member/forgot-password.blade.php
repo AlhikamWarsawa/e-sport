@@ -2,47 +2,47 @@
     <div style="max-width:600px;margin:0 auto;background:#ffffff;border:1px solid #e5e7eb;border-radius:12px;overflow:hidden;box-shadow:0 4px 14px rgba(0,0,0,0.06);">
         <div style="padding:28px 24px;">
             <h2 style="margin:0 0 8px;font-size:22px;line-height:1.3;color:#0f172a;">
-                Halo {{ $member->full_name }},
+                Halo {{ $name }},
             </h2>
 
             <p style="margin:0 0 14px;font-size:14px;color:#374151;">
-                Pendaftaran kamu sebagai <strong>member Fansclub Esports telah disetujui</strong>.
+                Kami menerima permintaan untuk <strong>mengatur ulang password</strong> akun member kamu.
             </p>
 
             <p style="margin:0 0 14px;font-size:14px;color:#374151;">
-                Akun member kamu sudah berhasil dibuat. Untuk alasan keamanan, silakan
-                <strong>mengatur password terlebih dahulu</strong> sebelum login ke sistem.
+                Demi keamanan akun, silakan atur password baru melalui tombol di bawah ini.
             </p>
 
             <div style="margin:18px 0;padding:14px 16px;background:#f1f5f9;border:1px dashed #cbd5e1;border-radius:10px;">
                 <div style="font-size:12px;color:#64748b;letter-spacing:.02em;">
-                    ID Member
+                    Email Akun
                 </div>
-                <div style="font-size:20px;font-weight:700;color:#0f172a;letter-spacing:.04em;">
-                    {{ $member->membership_id }}
+                <div style="font-size:16px;font-weight:600;color:#0f172a;">
+                    {{ $email }}
                 </div>
             </div>
 
             <p style="margin:0 0 16px;font-size:14px;color:#374151;">
-                Klik tombol di bawah ini untuk membuat password akun member kamu:
+                Klik tombol berikut untuk melanjutkan proses reset password:
             </p>
 
             <div style="margin:22px 0;text-align:center;">
-                <a href="{{ url('/member/set-password/'.$token) }}"
+                <a href="{{ $resetUrl }}"
                    style="display:inline-block;padding:12px 22px;background:#2563eb;color:#ffffff;
-                      text-decoration:none;font-size:14px;font-weight:600;border-radius:8px;">
-                    Set Password Akun Member
+                  text-decoration:none;font-size:14px;font-weight:600;border-radius:8px;">
+                    Reset Password Akun Member
                 </a>
             </div>
 
             <p style="margin:0 0 14px;font-size:13px;color:#6b7280;">
-                Link ini bersifat <strong>satu kali pakai</strong> dan memiliki batas waktu.
-                Jika link sudah tidak valid, silakan gunakan fitur <em>Lupa Password</em>.
+                Link ini bersifat <strong>satu kali pakai</strong> dan akan kedaluwarsa pada:
+                <br>
+                <strong>{{ \Carbon\Carbon::parse($expiredAt)->format('d M Y H:i') }}</strong>
             </p>
 
-            <p style="margin:0 0 14px;font-size:14px;color:#374151;">
-                Setelah password berhasil dibuat, kamu akan langsung diarahkan ke halaman
-                profil member.
+            <p style="margin:0 0 14px;font-size:13px;color:#6b7280;">
+                Jika kamu tidak merasa melakukan permintaan ini, silakan abaikan email ini.
+                Password akun kamu tidak akan berubah.
             </p>
 
             <div style="margin-top:22px;color:#6b7280;font-size:13px;">

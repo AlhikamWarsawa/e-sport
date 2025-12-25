@@ -9,3 +9,6 @@
 
 /qr/*
 !/qr/.gitignore
+
+/profile/*
+!/profile/.gitignore
