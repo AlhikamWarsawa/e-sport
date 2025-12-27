@@ -17,6 +17,7 @@ use Illuminate\Support\Str;
 use Carbon\Carbon;
 use Endroid\QrCode\QrCode;
 use Endroid\QrCode\Writer\PngWriter;
+use App\Helpers\AdminLogger;
 
 class ApplicationsController extends Controller
 {
@@ -32,7 +33,6 @@ class ApplicationsController extends Controller
     public function show($id)
     {
         $application = MemberProfile::findOrFail($id);
-
         return view('admin.applications.show', compact('application'));
     }
 
@@ -61,7 +61,7 @@ class ApplicationsController extends Controller
                 $lastNumber = MemberProfile::where('membership_id', 'like', "FANS-{$year}-%")
                     ->max(DB::raw('CAST(SUBSTR(membership_id, -4) AS UNSIGNED)')) ?? 0;
 
-                $newNumber   = str_pad($lastNumber + 1, 4, '0', STR_PAD_LEFT);
+                $newNumber    = str_pad($lastNumber + 1, 4, '0', STR_PAD_LEFT);
                 $membershipId = "FANS-{$year}-{$newNumber}";
 
                 $qrToken = Str::random(64);
@@ -87,10 +87,10 @@ class ApplicationsController extends Controller
                     ->saveToFile($qrFullPath);
 
                 $application->update([
-                    'membership_id'        => $membershipId,
-                    'qr_code_path'         => $qrFileName,
-                    'qr_token'             => $qrToken,
-                    'qr_token_expires_at'  => null,
+                    'membership_id'       => $membershipId,
+                    'qr_code_path'        => $qrFileName,
+                    'qr_token'            => $qrToken,
+                    'qr_token_expires_at' => null,
                 ]);
             });
 
@@ -118,6 +118,13 @@ class ApplicationsController extends Controller
 
             Mail::to($application->email)
                 ->send(new MemberApprovedMail($application, $token));
+
+            AdminLogger::log('approve_member', [
+                'member_profile_id' => $application->id,
+                'member_name'       => $application->full_name,
+                'membership_id'     => $application->membership_id,
+                'user_id'           => $user->id,
+            ]);
 
             DB::commit();
 
@@ -164,6 +171,12 @@ class ApplicationsController extends Controller
 
             Mail::to($application->email)
                 ->send(new MemberRejectedMail($application));
+
+            AdminLogger::log('reject_member', [
+                'member_profile_id' => $application->id,
+                'member_name'       => $application->full_name,
+                'reason'            => $request->rejected_reason,
+            ]);
 
             DB::commit();
 

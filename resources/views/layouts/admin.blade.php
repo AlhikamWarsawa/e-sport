@@ -31,27 +31,49 @@
         <!-- Desktop Nav -->
         @if($admin)
             <nav class="space-x-6 hidden md:flex items-center">
-                <x-nav-link href="/admin/dashboard" :active="request()->is('admin/dashboard')" admin>
+                <x-nav-link href="{{ route('admin.dashboard') }}"
+                            :active="request()->routeIs('admin.dashboard')"
+                            admin>
                     Dashboard
                 </x-nav-link>
 
-                <x-nav-link href="/admin/members" :active="request()->is('admin/members')" admin>
+                <x-nav-link href="{{ route('admin.activity_logs.index') }}"
+                            :active="request()->routeIs('admin.activity_logs.*')"
+                            admin>
+                    Logs
+                </x-nav-link>
+
+                <x-nav-link href="{{ route('admin.members.index') }}"
+                            :active="request()->routeIs('admin.members.*')"
+                            admin>
                     Members
                 </x-nav-link>
 
-                <x-nav-link href="/admin/news" :active="request()->is('admin/news')" admin>
+                <x-nav-link href="{{ route('admin.news.index') }}"
+                            :active="request()->routeIs('admin.news.*')"
+                            admin>
                     News
                 </x-nav-link>
 
-                <x-nav-link href="/admin/applications" :active="request()->is('admin/applications')" admin>
+                <x-nav-link href="{{ route('admin.applications.index') }}"
+                            :active="request()->routeIs('admin.applications.*')"
+                            admin>
                     Applications
                 </x-nav-link>
 
-                <x-nav-link href="/admin/merchandise" :active="request()->is('admin/merchandise')" admin>
+                <x-nav-link href="{{ route('admin.merchandise.index') }}"
+                            :active="request()->routeIs('admin.merchandise.*')"
+                            admin>
                     Merchandise
                 </x-nav-link>
 
-                <form action="/admin/logout" method="POST" class="inline">
+                <x-nav-link href="{{ route('admin.settings.index') }}"
+                            :active="request()->routeIs('admin.settings.*')"
+                            admin>
+                    Setting
+                </x-nav-link>
+
+                <form action="{{ route('admin.logout') }}" method="POST" class="inline">
                     @csrf
                     <button class="hover:text-red-400 text-sm">
                         Logout
@@ -82,27 +104,49 @@
             x-show="open"
             x-transition
         >
-            <x-nav-link href="/admin/dashboard" :active="request()->is('admin/dashboard')" admin mobile>
+            <x-nav-link href="{{ route('admin.dashboard') }}"
+                        :active="request()->routeIs('admin.dashboard')"
+                        admin>
                 Dashboard
             </x-nav-link>
 
-            <x-nav-link href="/admin/members" :active="request()->is('admin/members')" admin>
+            <x-nav-link href="{{ route('admin.activity_logs.index') }}"
+                        :active="request()->routeIs('admin.activity_logs.*')"
+                        admin>
+                Logs
+            </x-nav-link>
+
+            <x-nav-link href="{{ route('admin.members.index') }}"
+                        :active="request()->routeIs('admin.members.*')"
+                        admin>
                 Members
             </x-nav-link>
 
-            <x-nav-link href="/admin/news" :active="request()->is('admin/news')" admin mobile>
+            <x-nav-link href="{{ route('admin.news.index') }}"
+                        :active="request()->routeIs('admin.news.*')"
+                        admin>
                 News
             </x-nav-link>
 
-            <x-nav-link href="/admin/applications" :active="request()->is('admin/applications')" admin mobile>
+            <x-nav-link href="{{ route('admin.applications.index') }}"
+                        :active="request()->routeIs('admin.applications.*')"
+                        admin>
                 Applications
             </x-nav-link>
 
-            <x-nav-link href="/admin/merchandise" :active="request()->is('admin/merchandise')" admin mobile>
+            <x-nav-link href="{{ route('admin.merchandise.index') }}"
+                        :active="request()->routeIs('admin.merchandise.*')"
+                        admin>
                 Merchandise
             </x-nav-link>
 
-            <form action="/admin/logout" method="POST" class="px-8 py-1.5">
+            <x-nav-link href="{{ route('admin.settings.index') }}"
+                        :active="request()->routeIs('admin.settings.*')"
+                        admin>
+                Setting
+            </x-nav-link>
+
+            <form action="{{ route('admin.logout') }}" method="POST" class="inline">
                 @csrf
                 <button class="hover:text-red-400 text-sm">
                     Logout

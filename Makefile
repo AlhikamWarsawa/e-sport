@@ -17,6 +17,8 @@ install:
 
 	@echo "Running migrations"
 	docker exec -it laravel_app php artisan migrate --force
+	docker exec -it laravel_app php artisan db:seed --class=SettingsSeeder
+
 
 	@echo "Installation complete"
 
@@ -24,7 +26,7 @@ install:
 g:
 	git pull
 	git add .
-	git commit -m "Admin Member Management"
+	git commit -m "Admin Logs + Settings + Unit Test"
 	git push -u origin main
 
 # CMD Laravel Pake Ini

@@ -20,6 +20,8 @@ use App\Http\Controllers\Admin\NewsAdminController;
 use App\Http\Controllers\Admin\MerchandiseAdminController;
 use App\Http\Controllers\Admin\MemberAdminController;
 use App\Http\Controllers\Admin\ApplicationsController;
+use App\Http\Controllers\Admin\SettingsController;
+use App\Http\Controllers\Admin\ActivityLogController;
 
 
 // FRONTEND ROUTES
@@ -68,54 +70,60 @@ Route::prefix('member')->group(function () {
 });
 
 
-
 // ADMIN ROUTES
-Route::prefix('admin')->group(function () {
+Route::prefix('admin')->name('admin.')->group(function () {
 
     // Admin Auth
-    Route::get('login', [LoginController::class, 'index'])->name('admin.login');
-    Route::post('login', [LoginController::class, 'store'])->name('admin.login.submit');
-    Route::post('logout', [LogoutController::class, 'logout'])->name('admin.logout');
+    Route::get('login', [LoginController::class, 'index'])->name('login');
+    Route::post('login', [LoginController::class, 'store'])->name('login.submit');
+    Route::post('logout', [LogoutController::class, 'logout'])->name('logout');
 
     // Admin Middleware
     Route::middleware('admin.auth')->group(function () {
 
         // Dashboard
-        Route::get('dashboard', [DashboardController::class, 'index'])->name('admin.dashboard');
+        Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
-        // Admin News
+        // Settings
+        Route::get('settings', [SettingsController::class, 'index'])->name('settings.index');
+        Route::put('settings', [SettingsController::class, 'update'])->name('settings.update');
+
+        // Activity Logs
+        Route::get('/activity-logs', [ActivityLogController::class, 'index'])->name('activity_logs.index');
+
+        // News
         Route::prefix('news')->group(function () {
-            Route::get('/', [NewsAdminController::class, 'index'])->name('admin.news.index');
-            Route::get('create', [NewsAdminController::class, 'create'])->name('admin.news.create');
-            Route::post('/', [NewsAdminController::class, 'store'])->name('admin.news.store');
-            Route::get('{id}/edit', [NewsAdminController::class, 'edit'])->name('admin.news.edit');
-            Route::put('{id}', [NewsAdminController::class, 'update'])->name('admin.news.update');
-            Route::delete('{id}', [NewsAdminController::class, 'destroy'])->name('admin.news.destroy');
-            Route::post('{id}/toggle', [NewsAdminController::class, 'toggle'])->name('admin.news.toggle');
+            Route::get('/', [NewsAdminController::class, 'index'])->name('news.index');
+            Route::get('create', [NewsAdminController::class, 'create'])->name('news.create');
+            Route::post('/', [NewsAdminController::class, 'store'])->name('news.store');
+            Route::get('{id}/edit', [NewsAdminController::class, 'edit'])->name('news.edit');
+            Route::put('{id}', [NewsAdminController::class, 'update'])->name('news.update');
+            Route::delete('{id}', [NewsAdminController::class, 'destroy'])->name('news.destroy');
+            Route::post('{id}/toggle', [NewsAdminController::class, 'toggle'])->name('news.toggle');
         });
 
-        // Admin Applications
+        // Applications
         Route::prefix('applications')->group(function () {
-            Route::get('/', [ApplicationsController::class, 'index'])->name('admin.applications.index');
-            Route::get('{id}', [ApplicationsController::class, 'show'])->name('admin.applications.show');
-            Route::post('{id}/approve', [ApplicationsController::class, 'approve'])->name('admin.applications.approve');
-            Route::post('{id}/reject', [ApplicationsController::class, 'reject'])->name('admin.applications.reject');
+            Route::get('/', [ApplicationsController::class, 'index'])->name('applications.index');
+            Route::get('{id}', [ApplicationsController::class, 'show'])->name('applications.show');
+            Route::post('{id}/approve', [ApplicationsController::class, 'approve'])->name('applications.approve');
+            Route::post('{id}/reject', [ApplicationsController::class, 'reject'])->name('applications.reject');
         });
 
-        // Admin Merchandise
+        // Merchandise
         Route::prefix('merchandise')->group(function () {
-            Route::get('/', [MerchandiseAdminController::class, 'index'])->name('admin.merchandise.index');
-            Route::get('create', [MerchandiseAdminController::class, 'create'])->name('admin.merchandise.create');
-            Route::post('/', [MerchandiseAdminController::class, 'store'])->name('admin.merchandise.store');
-            Route::get('{id}/edit', [MerchandiseAdminController::class, 'edit'])->name('admin.merchandise.edit');
-            Route::put('{id}', [MerchandiseAdminController::class, 'update'])->name('admin.merchandise.update');
-            Route::delete('{id}', [MerchandiseAdminController::class, 'destroy'])->name('admin.merchandise.destroy');
+            Route::get('/', [MerchandiseAdminController::class, 'index'])->name('merchandise.index');
+            Route::get('create', [MerchandiseAdminController::class, 'create'])->name('merchandise.create');
+            Route::post('/', [MerchandiseAdminController::class, 'store'])->name('merchandise.store');
+            Route::get('{id}/edit', [MerchandiseAdminController::class, 'edit'])->name('merchandise.edit');
+            Route::put('{id}', [MerchandiseAdminController::class, 'update'])->name('merchandise.update');
+            Route::delete('{id}', [MerchandiseAdminController::class, 'destroy'])->name('merchandise.destroy');
         });
 
-        // Admin Members
+        // Members
         Route::prefix('members')->group(function () {
-            Route::get('/', [MemberAdminController::class, 'index'])->name('admin.members.index');
-            Route::get('{membership_id}', [MemberAdminController::class, 'show'])->name('admin.members.show');
+            Route::get('/', [MemberAdminController::class, 'index'])->name('members.index');
+            Route::get('{membership_id}', [MemberAdminController::class, 'show'])->name('members.show');
         });
     });
 });

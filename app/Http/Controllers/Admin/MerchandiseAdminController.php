@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
+use App\Helpers\AdminLogger;
 
 class MerchandiseAdminController extends Controller
 {
@@ -71,6 +72,11 @@ class MerchandiseAdminController extends Controller
             }
         }
 
+        AdminLogger::log('create_merchandise', [
+            'merchandise_id' => $merchandise->id,
+            'name'           => $merchandise->name,
+        ]);
+
         return redirect()
             ->route('admin.merchandise.index')
             ->with('success', 'Merchandise berhasil ditambahkan.');
@@ -127,6 +133,11 @@ class MerchandiseAdminController extends Controller
             }
         }
 
+        AdminLogger::log('update_merchandise', [
+            'merchandise_id' => $merchandise->id,
+            'name'           => $merchandise->name,
+        ]);
+
         return redirect()
             ->route('admin.merchandise.index')
             ->with('success', 'Merchandise berhasil diperbarui.');
@@ -136,13 +147,20 @@ class MerchandiseAdminController extends Controller
     {
         $merchandise = Merchandise::with('links')->findOrFail($id);
 
+        $merchandiseId   = $merchandise->id;
+        $merchandiseName = $merchandise->name;
+
         if ($merchandise->image && File::exists(public_path('images/merch/' . $merchandise->image))) {
             File::delete(public_path('images/merch/' . $merchandise->image));
         }
 
         MerchandiseLink::where('merchandise_id', $merchandise->id)->delete();
-
         $merchandise->delete();
+
+        AdminLogger::log('delete_merchandise', [
+            'merchandise_id' => $merchandiseId,
+            'name'           => $merchandiseName,
+        ]);
 
         return redirect()
             ->route('admin.merchandise.index')

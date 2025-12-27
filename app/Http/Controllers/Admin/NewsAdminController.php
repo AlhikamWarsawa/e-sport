@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
+use App\Helpers\AdminLogger;
 
 class NewsAdminController extends Controller
 {
@@ -47,7 +48,7 @@ class NewsAdminController extends Controller
             $file->move(public_path('images/news'), $thumbnailName);
         }
 
-        News::create([
+        $news = News::create([
             'title'        => $validated['title'],
             'slug'         => $slug,
             'summary'      => $validated['summary'],
@@ -56,6 +57,11 @@ class NewsAdminController extends Controller
             'published_at' => $validated['published_at'],
             'status'       => 'published',
             'created_by'   => Auth::guard('admin')->id(),
+        ]);
+
+        AdminLogger::log('create_news', [
+            'news_id' => $news->id,
+            'title'   => $news->title,
         ]);
 
         return redirect()
@@ -81,10 +87,12 @@ class NewsAdminController extends Controller
             'published_at' => 'required|date',
         ]);
 
-        $news->title        = $validated['title'];
-        $news->summary      = $validated['summary'];
-        $news->content      = $validated['content'];
-        $news->published_at = $validated['published_at'];
+        $news->update([
+            'title'        => $validated['title'],
+            'summary'      => $validated['summary'],
+            'content'      => $validated['content'],
+            'published_at' => $validated['published_at'],
+        ]);
 
         if ($request->hasFile('thumbnail')) {
             if ($news->thumbnail && File::exists(public_path('images/news/' . $news->thumbnail))) {
@@ -95,10 +103,15 @@ class NewsAdminController extends Controller
             $thumbnailName = time() . '_' . Str::random(6) . '.' . $file->getClientOriginalExtension();
             $file->move(public_path('images/news'), $thumbnailName);
 
-            $news->thumbnail = $thumbnailName;
+            $news->update([
+                'thumbnail' => $thumbnailName,
+            ]);
         }
 
-        $news->save();
+        AdminLogger::log('update_news', [
+            'news_id' => $news->id,
+            'title'   => $news->title,
+        ]);
 
         return redirect()
             ->route('admin.news.index')
@@ -113,7 +126,15 @@ class NewsAdminController extends Controller
             File::delete(public_path('images/news/' . $news->thumbnail));
         }
 
+        $newsId    = $news->id;
+        $newsTitle = $news->title;
+
         $news->delete();
+
+        AdminLogger::log('delete_news', [
+            'news_id' => $newsId,
+            'title'   => $newsTitle,
+        ]);
 
         return redirect()
             ->route('admin.news.index')
@@ -124,11 +145,18 @@ class NewsAdminController extends Controller
     {
         $news = News::findOrFail($id);
 
-        $news->status = $news->status === 'published'
-            ? 'draft'
-            : 'published';
+        $oldStatus = $news->status;
 
-        $news->save();
+        $news->update([
+            'status' => $news->status === 'published' ? 'draft' : 'published',
+        ]);
+
+        AdminLogger::log('toggle_news_status', [
+            'news_id'   => $news->id,
+            'title'     => $news->title,
+            'from'      => $oldStatus,
+            'to'        => $news->status,
+        ]);
 
         return redirect()
             ->route('admin.news.index')
