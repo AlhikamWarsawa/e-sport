@@ -30,7 +30,7 @@
 
                     <div class="text-center">
                         <img
-                            src="{{ $profile->photo_url ?? asset('images/default-avatar.png') }}"
+                            src="{{ $profile->photo_url ?? '-' }}"
                             class="w-32 h-32 mx-auto rounded-full object-cover border"
                             alt="Foto Profil"
                         >
@@ -127,10 +127,6 @@
                             <div>
                                 <strong>ID Member:</strong>
                                 <span class="font-mono">{{ $profile->membership_id }}</span>
-                            </div>
-                            <div class="mt-1 break-all text-xs text-gray-500">
-                                <strong>URL:</strong>
-                                {{ url('/member/profile/' . $profile->membership_id) }}
                             </div>
                         </div>
                     </div>

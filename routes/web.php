@@ -10,6 +10,7 @@ use App\Http\Controllers\Frontend\MemberController;
 use App\Http\Controllers\Frontend\Auth\MemberLoginController;
 use App\Http\Controllers\Frontend\Auth\MemberLogoutController;
 use App\Http\Controllers\Frontend\Auth\MemberPasswordController;
+use App\Http\Controllers\Frontend\MemberVerificationController;
 
 // ADMIN
 use App\Http\Controllers\Admin\Auth\LoginController;
@@ -17,6 +18,7 @@ use App\Http\Controllers\Admin\Auth\LogoutController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\NewsAdminController;
 use App\Http\Controllers\Admin\MerchandiseAdminController;
+use App\Http\Controllers\Admin\MemberAdminController;
 use App\Http\Controllers\Admin\ApplicationsController;
 
 
@@ -53,6 +55,9 @@ Route::prefix('member')->group(function () {
     })->name('member.password.forgot');
 
     Route::post('forgot-password', [MemberPasswordController::class, 'sendForgotPasswordLink'])->name('member.password.forgot.submit');
+
+    Route::get('verify/{token}', [MemberVerificationController::class, 'show'])->name('member.verify');
+
 
     Route::middleware('member')->group(function () {
         Route::get('profile', [MemberController::class, 'profile'])->name('member.profile');
@@ -105,6 +110,12 @@ Route::prefix('admin')->group(function () {
             Route::get('{id}/edit', [MerchandiseAdminController::class, 'edit'])->name('admin.merchandise.edit');
             Route::put('{id}', [MerchandiseAdminController::class, 'update'])->name('admin.merchandise.update');
             Route::delete('{id}', [MerchandiseAdminController::class, 'destroy'])->name('admin.merchandise.destroy');
+        });
+
+        // Admin Members
+        Route::prefix('members')->group(function () {
+            Route::get('/', [MemberAdminController::class, 'index'])->name('admin.members.index');
+            Route::get('{membership_id}', [MemberAdminController::class, 'show'])->name('admin.members.show');
         });
     });
 });

@@ -24,7 +24,7 @@ install:
 g:
 	git pull
 	git add .
-	git commit -m "URL Barcode + Payment History"
+	git commit -m "Admin Member Management"
 	git push -u origin main
 
 # CMD Laravel Pake Ini

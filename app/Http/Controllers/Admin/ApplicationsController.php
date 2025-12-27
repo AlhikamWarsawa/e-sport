@@ -46,35 +46,38 @@ class ApplicationsController extends Controller
 
         DB::beginTransaction();
 
+        $qrFullPath = null;
+
         try {
             $year = now()->year;
             $membershipId = null;
-            $qrFullPath = null;
 
             Cache::lock("generate-membership-{$year}", 10)->block(10, function () use (
                 $year,
                 &$membershipId,
-                &$qrFullPath,
-                $application
+                $application,
+                &$qrFullPath
             ) {
                 $lastNumber = MemberProfile::where('membership_id', 'like', "FANS-{$year}-%")
                     ->max(DB::raw('CAST(SUBSTR(membership_id, -4) AS UNSIGNED)')) ?? 0;
 
-                $newNumber = str_pad($lastNumber + 1, 4, '0', STR_PAD_LEFT);
+                $newNumber   = str_pad($lastNumber + 1, 4, '0', STR_PAD_LEFT);
                 $membershipId = "FANS-{$year}-{$newNumber}";
+
+                $qrToken = Str::random(64);
 
                 $qrDir = public_path('images/qr');
                 if (!File::exists($qrDir)) {
                     File::makeDirectory($qrDir, 0755, true);
                 }
 
-                $profileUrl = route('member.profile');
+                $verificationUrl = route('member.verify', $qrToken);
 
                 $qrFileName = "{$membershipId}.png";
                 $qrFullPath = $qrDir . '/' . $qrFileName;
 
                 $qrCode = new QrCode(
-                    data: $profileUrl,
+                    data: $verificationUrl,
                     size: 300,
                     margin: 10
                 );
@@ -82,11 +85,16 @@ class ApplicationsController extends Controller
                 (new PngWriter())
                     ->write($qrCode)
                     ->saveToFile($qrFullPath);
+
+                $application->update([
+                    'membership_id'        => $membershipId,
+                    'qr_code_path'         => $qrFileName,
+                    'qr_token'             => $qrToken,
+                    'qr_token_expires_at'  => null,
+                ]);
             });
 
             $application->update([
-                'membership_id'   => $membershipId,
-                'qr_code_path' => "{$membershipId}.png",
                 'status'          => 'approved',
                 'approved_at'     => now(),
                 'rejected_reason' => null,
@@ -104,7 +112,7 @@ class ApplicationsController extends Controller
             $token = Str::random(64);
 
             $user->update([
-                'set_password_token' => $token,
+                'set_password_token'            => $token,
                 'set_password_token_expired_at' => Carbon::now()->addHours(24),
             ]);
 
@@ -123,6 +131,8 @@ class ApplicationsController extends Controller
             if ($qrFullPath && File::exists($qrFullPath)) {
                 File::delete($qrFullPath);
             }
+
+            report($e);
 
             return back()->with(
                 'error',
