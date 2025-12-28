@@ -219,7 +219,7 @@ docker exec -it mysql_laravel mysql -u root -p
 
 ## Documentation
 
-* **Technical Whitepaper**: [https://zenodo.org/records/18069408](https://zenodo.org/records/18069408)
+* [Technical Whitepaper](https://zenodo.org/records/18073923)
 
 ---
 
