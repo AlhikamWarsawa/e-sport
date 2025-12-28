@@ -19,7 +19,6 @@ install:
 	docker exec -it laravel_app php artisan migrate --force
 	docker exec -it laravel_app php artisan db:seed --class=SettingsSeeder
 
-
 	@echo "Installation complete"
 
 # Git Shortcut (Main Push)
