@@ -22,11 +22,12 @@ install:
 start:
 	docker compose up -d
 	docker exec -it laravel_app php artisan serve --host=0.0.0.0 --port=8000
+
 # Git Shortcut (Main Push)
 g:
 	git pull
 	git add .
-	git commit -m "Last Commit"
+	git commit -m "use bookworm based for PHP"
 	git push -u origin main
 
 # Use Command

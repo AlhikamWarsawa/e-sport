@@ -104,32 +104,6 @@ Prepare the environment file before starting any services so Docker containers c
 cp .env.example .env
 ```
 
-Edit the `.env` file according to your local setup:
-
-```env
-APP_NAME="Fansclub Esport"
-APP_URL=http://localhost
-
-DB_CONNECTION=mysql
-DB_HOST=mysql
-DB_PORT=3306
-DB_DATABASE=laravel
-DB_USERNAME=root
-DB_PASSWORD=secret
-
-SESSION_DRIVER=database
-QUEUE_CONNECTION=database
-
-MAIL_MAILER=smtp
-MAIL_HOST=smtp.your_host.com
-MAIL_PORT=587
-MAIL_USERNAME=your_smtp_user
-MAIL_PASSWORD=your_smtp_password
-MAIL_ENCRYPTION=tls
-MAIL_FROM_ADDRESS=no-reply@example.com
-MAIL_FROM_NAME="Fansclub Esport"
-```
-
 ---
 
 #### 3. Start Docker Containers
