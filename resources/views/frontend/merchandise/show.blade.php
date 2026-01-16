@@ -3,73 +3,79 @@
 @section('title', $item->name)
 
 @section('content')
-    <div class="max-w-5xl mx-auto py-10">
+    <div class="max-w-6xl mx-auto px-4 py-10">
 
         <a href="{{ route('merchandise.index') }}"
-           class="inline-flex items-center text-sm text-blue-600 hover:text-blue-800 mb-6">
+           class="inline-flex items-center gap-1 text-sm font-medium text-blue-600 hover:text-blue-800 mb-6 transition">
             ← Back to all merchandise
         </a>
 
-        <div class="bg-white border border-gray-100 rounded-2xl shadow-sm p-6 md:p-8">
-            <div class="flex flex-col md:flex-row gap-8 items-start">
+        <div class="bg-white border border-gray-100 rounded-lg shadow-sm overflow-hidden">
 
-                <div class="w-full md:w-64 lg:w-72 shrink-0">
+            <div class="grid grid-cols-1 md:grid-cols-2 py-14 pr-20">
+
+                <div class="flex justify-center">
                     <img
                         src="{{ $item->image_url }}"
                         alt="{{ $item->name }}"
-                        class="w-full aspect-[4/5] object-cover rounded-xl border border-gray-200"
+                        class="w-full max-w-sm aspect-[4/5] object-cover rounded border border-gray-200"
                     >
                 </div>
 
-                <div class="flex-1 space-y-5">
+                <div class="flex flex-col space-y-6">
 
                     <div>
-                        <h1 class="text-2xl md:text-3xl font-semibold text-gray-900">
+                        <h1 class="text-2xl md:text-3xl font-bold text-gray-900 leading-tight">
                             {{ $item->name }}
                         </h1>
 
                         @if ($item->price)
-                            <p class="mt-1 text-lg font-medium text-emerald-700">
+                            <p class="mt-2 text-2xl font-semibold text-emerald-700">
                                 Rp {{ number_format($item->price, 0, ',', '.') }}
                             </p>
                         @else
-                            <p class="mt-1 text-sm text-gray-500">Harga belum tersedia</p>
+                            <p class="mt-2 text-sm text-gray-500">
+                                Harga belum tersedia
+                            </p>
                         @endif
                     </div>
 
-                    <div class="bg-gray-50 border border-gray-200 rounded-xl p-4 md:p-5">
-                        <h2 class="sr-only">Deskripsi merchandise</h2>
-                        <div class="text-sm md:text-base text-gray-700 leading-relaxed">
+                    <div>
+                        <h2 class="text-sm font-semibold text-gray-900 mb-2">
+                            Deskripsi Produk
+                        </h2>
+
+                        <div class="text-gray-700 leading-relaxed text-sm md:text-base bg-gray-50 border border-gray-200 rounded-xl p-4">
                             {!! nl2br(e($item->description)) !!}
                         </div>
                     </div>
 
-                    @if ($item->links->count())
-                        <div class="pt-1">
-                            <p class="text-sm font-medium text-gray-700 mb-2">
-                                Barang Tersedia:
+                    <div class="pt-2">
+                        @if ($item->links->count())
+                            <p class="text-sm font-semibold text-gray-900 mb-3">
+                                Tersedia di:
                             </p>
+
                             <div class="flex flex-wrap gap-3">
                                 @foreach ($item->links as $link)
                                     <a
                                         href="{{ $link->url }}"
                                         target="_blank"
                                         rel="noopener noreferrer"
-                                        class="px-4 py-2 text-sm font-medium border border-gray-400 rounded-full
-                                               text-gray-800 hover:bg-gray-100 transition"
+                                        class="inline-flex items-center justify-center px-5 py-2.5 text-sm font-medium
+                                               rounded-full border border-emerald-600 text-emerald-700
+                                               hover:bg-emerald-600 hover:text-white transition"
                                     >
                                         {{ $link->shop_name }}
                                     </a>
                                 @endforeach
                             </div>
-                        </div>
-                    @else
-                        <div class="pt-1">
-                            <p class="text-sm font-medium text-red-500 mb-2">
-                                Barang Tidak Tersedia
-                            </p>
-                        </div>
-                    @endif
+                        @else
+                            <div class="inline-flex items-center gap-2 text-sm font-medium text-red-600 bg-red-50 border border-red-200 px-4 py-2 rounded-lg">
+                                Barang tidak tersedia
+                            </div>
+                        @endif
+                    </div>
 
                 </div>
             </div>

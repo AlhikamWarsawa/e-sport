@@ -18,6 +18,7 @@ class MemberController extends Controller
     {
         return view('frontend.member.register');
     }
+    
     public function store(Request $request)
     {
         $validated = $request->validate([

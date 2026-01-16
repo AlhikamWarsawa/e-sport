@@ -130,11 +130,11 @@
     </nav>
 </header>
 
-<main class="max-w-7xl mx-auto px-4 py-6">
+<main class="max-w-7xl mx-auto px-4 py-4">
     @yield('content')
 </main>
 
-<footer class="bg-white shadow mt-10">
+<footer class="bg-white shadow">
     <div class="max-w-7xl mx-auto px-4 py-4 text-center text-sm text-gray-600">
         © {{ date('Y') }} {{ $settings->fansclub_name ?? 'Fansclub' }}. All rights reserved.
     </div>
